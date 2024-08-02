@@ -1,10 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Models;
 
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class CartItemController extends Controller
+class CartItem extends Model
 {
-    //
+    use HasFactory;
+
+    protected $fillable = [
+        'cart_id',
+        'product_variant_id',
+        'quantity',
+    ];
+
+    public function product_variant()
+    {
+        return $this->belongsTo(ProductVariant::class);
+    }
 }

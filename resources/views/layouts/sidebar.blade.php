@@ -92,8 +92,13 @@
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                         {{ Auth::user()->name }}
                                     </a>
-
+                                
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <!-- Link đến trang admin nếu là admin -->
+                                        @if(Auth::check() && Auth::user()->role === 'admin')
+                                            <a class="dropdown-item" href="{{ route('admin.dashboard') }}">Admin Dashboard</a>
+                                        @endif
+                                
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                             {{ __('Logout') }}
@@ -104,6 +109,7 @@
                                         </form>
                                     </div>
                                 </li>
+                                
                                 @endguest
                             </ul>
                         {{-- </div> --}}
