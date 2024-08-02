@@ -23,15 +23,19 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{{asset('theme/eshopper/css/style.css')}}" rel="stylesheet">
+    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
+    <!-- Scripts -->
+    @vite(['resources/js/app.js'])
+    
 </head>
 
 <body>
     <!-- Topbar Start -->
     @include('layouts.header')
     <!-- Topbar End -->
-
     @include('layouts.sidebar')
+    {{-- //@include('layouts.menu') --}}
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->

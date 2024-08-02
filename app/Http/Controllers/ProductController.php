@@ -30,11 +30,18 @@ class ProductController extends Controller
         // Kiểm tra nếu biến có giá trị hợp lệ
         $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
-            ->limit(4)
+            ->limit(7)
             ->get();
+            $categories = Category::pluck('name', 'id'); // Lấy danh mục và truyền vào view
     
-        return view('product-detail', compact('product', 'colors', 'sizes', 'relatedProducts'));
+            $variantImages = $product->variants->pluck('image');
+        return view('product-detail', compact('product','categories','variantImages', 'colors', 'sizes', 'relatedProducts'));
     }
+    // public function getCategories() {
+    //     $categories = Category::all();
+    //     return view('layouts.sidebar', compact('categories'));
+    // }
+    
     
     public function list(Request $request)
     {
@@ -65,6 +72,7 @@ class ProductController extends Controller
     
         // Fetch the filtered products
         $products = $query->paginate(9);
+       
     
         // Fetch categories, sizes, and colors for filtering options
         $categories = Category::pluck('name', 'id');
