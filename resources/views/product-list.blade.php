@@ -23,6 +23,21 @@
             <form action="{{ route('product.list') }}" method="GET">
                 <!-- Price Filter Start -->
                 <div class="border-bottom mb-4 pb-4">
+                    <div class="col-lg-3 d-none d-lg-block">
+                        <a class="btn shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; margin-top: -1px; padding: 0 30px;">
+                            <h6 class="m-0">Categories</h6>
+                            <i class="fa fa-angle-down text-dark"></i>
+                        </a>
+                        <nav class="collapse navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical">
+                            <div class="navbar-nav w-100 overflow-hidden" style="height: 410px">
+                                @foreach($categories as $id => $name)
+                                    <a href="{{ route('product.list', ['category' => $id]) }}" class="nav-item nav-link">
+                                        {{ $name }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </nav>
+                    </div>
                     <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
                     <div class="d-flex">
                         <input type="number" class="form-control" name="price_min" placeholder="Min" value="{{ request('price_min') }}">
@@ -92,9 +107,41 @@
                 @foreach($products as $product)
                 <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
                     <div class="card product-item border-0 mb-4">
-                        <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                        {{-- <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                             <img class="" width="100%" height="400px" src="{{ Storage::url($product->img_thumb) }}" alt="{{ $product->name }}">
                         </div>
+                        
+                        --}}
+
+                        <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                            <img class="" width="100%" height="400px" src="{{ Storage::url($product->img_thumb) }}" alt="{{ $product->name }}">
+                            <!-- Trạng thái sản phẩm -->
+                            <div class="product-status">
+                                <span>  {!! $product->is_active ? '<span  class="badge bg-success rounded text-white">Còn hàng</span>'
+                                : '<span class="badge bg-danger text-white">Hết hàng</span>'!!}</span>
+                            </div>
+                        </div>
+                        
+                        <style>
+                            .product-img {
+                                position: relative;
+                            }
+                    
+                            .product-status {
+                                position: absolute;
+                                top: 7px;
+                                right: 7px;
+                                
+                               /* Nền bán trong suốt */
+                                color: white; /* Màu chữ */
+                                padding: 5px 7px;
+                                border-radius: 5px;
+                                font-weight: bold;
+                                font-size: 17px;
+                                text-align: center;
+                                z-index: 10; /* Đảm bảo lớp trạng thái nằm trên hình ảnh */
+                            }
+                        </style>
                         <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                             <h6 class="text-truncate mb-3">{{ $product->name }}</h6>
                             <div class="d-flex justify-content-center">

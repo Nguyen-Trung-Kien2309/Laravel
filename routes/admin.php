@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,9 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'checkRole:admin'])->g
 
     // Quản lý sản phẩm
     Route::resource('products', ProductController::class);
+    Route::resource('users', UserController::class);
+    Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
+
 
     // Bạn có thể thêm nhiều route khác cho phần admin tại đây
 });

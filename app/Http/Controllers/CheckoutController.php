@@ -71,4 +71,5 @@ class CheckoutController extends Controller
             return back()->withErrors(['error' => 'Đặt hàng không thành công.']);
         }
     }
+    
 }

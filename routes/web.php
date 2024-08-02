@@ -41,7 +41,6 @@ Route::get('/products', [ProductController::class, 'list'])->name('product.list'
 Route::get('/products/sort', [ProductController::class, 'sort'])->name('product.sort');
 Route::get('/products/search', [ProductController::class, 'search'])->name('product.search');
 Route::get('/products/{id}', [ProductController::class, 'details'])->name('product.details');
-
 // Mua hàng (cần xác thực)
 Route::middleware('auth')->group(function () {
     Route::post('cart/add', [CartController::class, 'add'])->name('cart.add');
@@ -55,6 +54,7 @@ Route::middleware('auth')->group(function () {
 
     // Định nghĩa route cho trang thanh toán
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    
     Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
     Route::get('/thankyou', function () {
         return view('thankyou');
