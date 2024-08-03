@@ -1,5 +1,3 @@
-<!-- resources/views/users/create.blade.php -->
-
 @extends('admin.layouts.master')
 
 @section('content')
@@ -34,7 +32,14 @@
 
             <div class="mb-3">
                 <label for="role" class="form-label">Role</label>
-                <input type="text" class="form-control" name="role" id="role" value="{{ old('role') }}">
+                <select name="role" id="role" class="form-control" required>
+                    @foreach ($roles as $value => $label)
+                        <option value="{{ $value }}" {{ old('role') == $value ? 'selected' : '' }}>
+                            {{ $label }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('role')<div class="text-danger">{{ $message }}</div>@enderror
             </div>
 
             <button type="submit" class="btn btn-primary">Create User</button>

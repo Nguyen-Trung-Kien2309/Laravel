@@ -1,5 +1,3 @@
-<!-- resources/views/users/edit.blade.php -->
-
 @extends('admin.layouts.master')
 
 @section('content')
@@ -35,7 +33,14 @@
 
             <div class="mb-3">
                 <label for="role" class="form-label">Role</label>
-                <input type="text" class="form-control" name="role" id="role" value="{{ old('role', $user->role) }}">
+                <select class="form-control" name="role" id="role">
+                    @foreach ($roles as $key => $role)
+                        <option value="{{ $key }}" {{ old('role', $user->role) == $key ? 'selected' : '' }}>
+                            {{ $role }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('role')<div class="text-danger">{{ $message }}</div>@enderror
             </div>
 
             <button type="submit" class="btn btn-primary">Update User</button>

@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -20,8 +21,19 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role', // Thêm role vào fillable để có thể sử dụng khi tạo user
+        'role',
     ];
+
+    // Phương thức tạo người dùng mới
+    public static function createUser(array $data)
+    {
+        return self::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']), // Mã hóa mật khẩu
+            'role' => $data['role'] ?? 'user', // Gán giá trị role mặc định là 'user' nếu không được cung cấp
+        ]);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

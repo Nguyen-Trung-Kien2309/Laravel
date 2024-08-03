@@ -8,7 +8,7 @@
     <p>Dear {{ $order->receiver_name }},</p>
     <p>Thank you for your order. Below are the details:</p>
     <p><strong>Order ID:</strong> {{ $order->id }}</p>
-    <p><strong>Total Price:</strong> {{ number_format($order->total_price, 0, ',', '.') }} VND</p>
+    <p><strong>Total Price:</strong> {{ number_format($order->totalPrice, 0, ',', '.') }} VND</p>
     <h3>Items:</h3>
     <ul>
         @foreach ($order->orderItems as $item)

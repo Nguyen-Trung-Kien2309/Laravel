@@ -92,7 +92,17 @@
        <a class="nav-link" href="{{route('admin.users.index')}}">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Account</span></a>
-   </li> 
+   </li>
+   <li class="nav-item">
+    <a class="nav-link" href="{{route('admin.banners.index')}}">
+         <i class="fas fa-fw fa-chart-area"></i>
+         <span>Banner</span></a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{{route('admin.promotions.index')}}">
+         <i class="fas fa-fw fa-chart-area"></i>
+         <span>Poomment</span></a>
+</li> 
 
 {{--    <!-- Nav Item - Tables -->--}}
 {{--    <li class="nav-item">--}}

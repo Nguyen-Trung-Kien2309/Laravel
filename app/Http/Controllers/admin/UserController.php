@@ -20,7 +20,15 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('admin.users.create');
+        // Định nghĩa các role có sẵn
+        $roles = [
+            'user' => 'User',
+            'admin' => 'Admin',
+            'manager' => 'Manager',
+            'editor' => 'Editor',
+        ];
+
+        return view('admin.users.create', compact('roles'));
     }
     public function show(User $user)
     {
