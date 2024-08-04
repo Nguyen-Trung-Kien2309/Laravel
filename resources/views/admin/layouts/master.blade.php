@@ -100,7 +100,35 @@
 <!-- Bootstrap core JavaScript-->
 <script src="{{asset('theme/admin/vendor/jquery/jquery.min.js')}}"></script>
 <script src="{{asset('theme/admin/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const discountInput = document.getElementById('discount');
+        const discountTypeSelect = document.getElementById('discount_type');
+    
+        function updateDiscountPlaceholder() {
+            if (discountTypeSelect.value === 'percentage') {
+                // Set step for percentage
+                discountInput.step = '0.01';
+                // Remove trailing zeros for percentage type
+                discountInput.value = parseFloat(discountInput.value).toFixed(2);
+            } else {
+                // Set step for fixed amount
+                discountInput.step = '0.01';
+                // Ensure value has two decimal places
+                discountInput.value = parseFloat(discountInput.value).toFixed(2);
+            }
+        }
+    
+        // Update initial display
+        updateDiscountPlaceholder();
+    
+        // Update on type change
+        discountTypeSelect.addEventListener('change', function () {
+            updateDiscountPlaceholder();
+        });
+    });
+    </script>
+    
 <!-- Core plugin JavaScript-->
 <script src="{{asset('theme/admin/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
 

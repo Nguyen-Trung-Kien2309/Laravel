@@ -1,48 +1,59 @@
 @extends('admin.layouts.master')
 
 @section('content')
-    <div class="container">
-        <h1 class="mb-4">Promotions</h1>
+<div class="container">
+    <h1>Danh sách khuyến mại</h1>
+    <a href="{{ route('admin.promotions.create') }}" class="btn btn-primary mb-3">Tạo Khuyến mại mới</a>
+    
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Tên</th>
+                <th>Mô tả</th>
+                <th>Giảm giá</th>
+                <th>Loại giảm giá</th>
+                <th>Ngày bắt đầu</th>
+                <th>Ngày kết thúc</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($promotions as $promotion)
+            <tr align="center">
 
-        <a href="{{ route('admin.promotions.create') }}" class="btn btn-primary mb-3">Create Promotion</a>
-
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Discount Percentage</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Actions</th>
+            <td>{{ $promotion->title }}</td>
+                    <td>{{ $promotion->description }}</td>
+                    <td>
+                        {{ $promotion->discount_type == 'percentage' ? number_format($promotion->discount, 0) . '%' : number_format($promotion->discount, 3) . 'VND' }}
+                    </td>
+                    
+                    <td>{{ ucfirst($promotion->discount_type) }}</td>
+                    <td>{{ \Carbon\Carbon::parse($promotion->start_date)->format('d-m-Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($promotion->end_date)->format('d-m-Y') }}</td>
+                    <td>
+                        {!! $promotion->isActive() ?  '<span class="badge bg-success text-white">Hoạt động</span>'
+                        : '<span class="badge bg-danger text-white">Không hoạt động</span>'!!}
+                    </td>
+                   
+                    <td>
+                        <a href="{{ route('admin.promotions.show', $promotion) }}" class="btn btn-info btn-sm">Xem</a>
+                        <a href="{{ route('admin.promotions.edit', $promotion) }}" class="btn btn-warning btn-sm">Chỉnh sửa</a>
+                        <form action="{{ route('admin.promotions.destroy', $promotion) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"onclick="return confirm('Bạn có chắc chắn muốn xóa không?')" class="btn btn-danger btn-sm">Xóa</button>
+                        </form>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach($promotions as $promotion)
-                    <tr>
-                        <td>{{ $promotion->id }}</td>
-                        <td>{{ $promotion->name }}</td>
-                        <td>{{ $promotion->discount_percentage }}%</td>
-                        <td>{{ $promotion->start_date }}</td>
-                        <td>{{ $promotion->end_date }}</td>
-                        <td>
-                            <a href="{{ route('admin.promotions.show', $promotion) }}" class="btn btn-info btn-sm">View</a>
-                            <a href="{{ route('admin.promotions.edit', $promotion) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('admin.promotions.destroy', $promotion) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 @endsection

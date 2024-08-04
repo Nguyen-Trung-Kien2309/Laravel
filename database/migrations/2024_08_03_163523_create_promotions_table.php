@@ -14,11 +14,13 @@ class CreatePromotionsTable extends Migration
     {
         Schema::create('promotions', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->decimal('discount_percentage', 5, 2); // Tỉ lệ giảm giá
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->string('title'); // Tên khuyến mại
+            $table->text('description')->nullable(); // Mô tả chi tiết
+            $table->decimal('discount', 5, 2); // Giảm giá (phần trăm hoặc số tiền cụ thể)
+            $table->enum('discount_type', ['percentage', 'fixed'])->default('percentage'); // Loại giảm giá
+            $table->date('start_date'); // Ngày bắt đầu
+            $table->date('end_date'); // Ngày kết thúc
+            $table->boolean('active')->default(true); // Trạng thái hoạt động của khuyến mại
             $table->timestamps();
         });
     }

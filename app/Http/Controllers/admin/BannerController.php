@@ -52,7 +52,7 @@ class BannerController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'image_path' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image_path' => 'nullable|image|mimes:jpeg,png,jpg,|max:2048',
             'link' => 'nullable|url',
             'description' => 'nullable|string',
         ]);

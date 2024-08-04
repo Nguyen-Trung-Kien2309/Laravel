@@ -27,6 +27,17 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'checkRole:admin'])->g
 
     // Quản lý danh mục sản phẩm
     Route::resource('categories', CategoryController::class);
+    Route::resource('promotions', PromotionController::class);
+// Route cho form tạo mới khuyến mại
+Route::get('admin/promotions/create', [PromotionController::class, 'create'])->name('promotions.create');
+Route::get('admin/promotions/{promotion}', [PromotionController::class, 'show'])->name('admin.promotions.show');
+
+
+// Route::get('admin/promotions/edit', [PromotionController::class, 'edit'])->name
+// ('promotions.edit');
+// Route cho form tạo mới khuyến mại
+// Route::get('admin/promotions/edit/', [PromotionController::class, 'edit
+// '])->name('promotions.edit');
 
     // Quản lý sản phẩm
     Route::resource('products', ProductController::class);
@@ -34,8 +45,6 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'checkRole:admin'])->g
     Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
     Route::resource('banners', BannerController::class);
     Route::get('banners/{banner}', [BannerController::class, 'show'])->name('banners.show');
-    Route::resource('promotions', PromotionController::class);
-    Route::get('promotions/{promotion}', [PromotionController::class, 'show'])->name('promotions.show');
 
 
 

@@ -2,28 +2,32 @@
 @section('content')
     <!-- Featured Start -->
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active" style="height: 410px;">
-                        <img class="img-fluid" src="{{asset('theme/eshopper/img/carousel-1.jpg')}}" alt="Image">
+        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @foreach($banners as $key => $banner)
+                    <div class="carousel-item {{ $key == 0 ? 'active' : '' }}" style="height: 410px;">
+                        <img class="img-fluid" src="{{ Storage::url($banner->image_path) }}" alt="Banner Image">
                         <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                             <div class="p-3" style="max-width: 700px;">
-                                <h4 class="text-light text-uppercase font-weight-medium mb-3">10% Off Your First Order</h4>
-                                <h3 class="display-4 text-white font-weight-semi-bold mb-4">Fashionable Dress</h3>
-                                <a href="" class="btn btn-light py-2 px-3">Shop Now</a>
+                                <h4 class="text-light text-uppercase font-weight-medium mb-3">{{ $banner->title }}</h4>
+                                <h3 class="display-4 text-white font-weight-semi-bold mb-4">{{ $banner->description }}</h3>
+                                @if($banner->link)
+                                    <a href="{{ $banner->link }}" class="btn btn-light py-2 px-3">Xem Ngay</a>
+                                @endif
                             </div>
                         </div>
                     </div>
-                    <div class="carousel-item" style="height: 410px;">
-                        <img class="img-fluid" src="{{asset('theme/eshopper/img/carousel-2.jpg')}}" alt="Image">
-                        <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-                            <div class="p-3" style="max-width: 700px;">
-                                <h4 class="text-light text-uppercase font-weight-medium mb-3">10% Off Your First Order</h4>
-                                <h3 class="display-4 text-white font-weight-semi-bold mb-4">Reasonable Price</h3>
-                                <a href="" class="btn btn-light py-2 px-3">Shop Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
+            </div>
+        
+            <!-- Điều hướng carousel -->
+            <a class="carousel-control-prev" href="#carouselExample" role="button" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExample" role="button" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </a>
+        </div>
                 <a class="carousel-control-prev" href="#header-carousel" data-slide="prev">
                     <div class="btn btn-dark" style="width: 45px; height: 45px;">
                         <span class="carousel-control-prev-icon mb-n2"></span>

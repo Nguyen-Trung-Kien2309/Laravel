@@ -4,6 +4,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
+use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
@@ -31,8 +32,8 @@ Route::get('/', function () {
         ->get();
 
     $categories = Category::pluck('name', 'id'); // Lấy danh mục và truyền vào view
-
-    return view('welcome', compact('products', 'categories'));
+    $banners = Banner::where('active', true)->get();
+    return view('welcome', compact('products', 'categories','banners'));
 })->name('welcome');
 
 // Chi tiết sản phẩm
