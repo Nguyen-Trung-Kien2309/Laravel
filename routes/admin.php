@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +44,11 @@ Route::get('admin/promotions/{promotion}', [PromotionController::class, 'show'])
 
 Route::resource('orders', OrderController::class)->except(['create', 'store', 'destroy']);
 Route::put('orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+
+
+
+Route::resource('invoices', InvoiceController::class)->only(['index', 'show']);
+Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
 
     // Quản lý sản phẩm
     Route::resource('products', ProductController::class);

@@ -107,6 +107,11 @@
     <a class="nav-link" href="{{ route('admin.orders.index') }}">
          <i class="fas fa-fw fa-chart-area"></i>
          <span>Quản lý Đơn hàng</span></a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('admin.invoices.index') }}">
+         <i class="fas fa-fw fa-chart-area"></i>
+         <span>Quản lý Hóa đơn</span></a>
 </li> 
 
 {{--    <!-- Nav Item - Tables -->--}}
