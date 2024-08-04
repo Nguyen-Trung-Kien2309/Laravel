@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,6 +39,10 @@ Route::get('admin/promotions/{promotion}', [PromotionController::class, 'show'])
 // Route cho form tạo mới khuyến mại
 // Route::get('admin/promotions/edit/', [PromotionController::class, 'edit
 // '])->name('promotions.edit');
+
+
+Route::resource('orders', OrderController::class)->except(['create', 'store', 'destroy']);
+Route::put('orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 
     // Quản lý sản phẩm
     Route::resource('products', ProductController::class);

@@ -103,6 +103,11 @@
          <i class="fas fa-fw fa-chart-area"></i>
          <span>Poomment</span></a>
 </li> 
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('admin.orders.index') }}">
+         <i class="fas fa-fw fa-chart-area"></i>
+         <span>Quản lý Đơn hàng</span></a>
+</li> 
 
 {{--    <!-- Nav Item - Tables -->--}}
 {{--    <li class="nav-item">--}}

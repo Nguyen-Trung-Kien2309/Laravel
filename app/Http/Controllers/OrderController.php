@@ -67,4 +67,30 @@ class OrderController extends Controller
             return redirect()->back()->with('error', 'Đặt hàng không thành công, vui lòng thử lại.');
         }
     }
+    public function index()
+    {
+        // Lấy danh sách đơn hàng từ database
+        $orders = Order::with('orderItems')->latest()->paginate(10);
+
+        return view('admin.orders.index', compact('orders'));
+    }
+
+    // Hiển thị chi tiết đơn hàng
+    public function show($id)
+    {
+        // Tìm đơn hàng theo ID
+        $order = Order::with('orderItems')->findOrFail($id);
+
+        return view('admin.orders.show', compact('order'));
+    }
+
+    // Phương thức cập nhật trạng thái đơn hàng
+    public function updateStatus(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+        $order->update($request->only('order_status', 'payment_status'));
+
+        return redirect()->route('admin.orders.index')->with('success', 'Cập nhật trạng thái thành công');
+    }
+
 }

@@ -1,119 +1,84 @@
 @extends('admin.layouts.master')
 
-@section('title', 'Chi tiết sản phẩm')
-
 @section('content')
-    <div class="container">
-        {{-- <h1 class="mb-4">Chi tiết sản phẩm</h1> --}}
+<div class="container">
+    <h1>Chi tiết Đơn hàng #{{ $order->id }}</h1>
+    <a href="{{ route('admin.orders.index') }}" class="btn btn-primary mb-3">Quay lại danh sách</a>
+    
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Thông tin người đặt hàng</h5>
+            <p class="card-text"><strong>Tên:</strong> {{ $order->user_name }}</p>
+            <p class="card-text"><strong>Email:</strong> {{ $order->user_email }}</p>
+            <p class="card-text"><strong>Số điện thoại:</strong> {{ $order->user_phone }}</p>
+            <p class="card-text"><strong>Địa chỉ:</strong> {{ $order->user_address }}</p>
+            
+            <h5 class="card-title mt-4">Thông tin người nhận hàng</h5>
+            <p class="card-text"><strong>Tên:</strong> {{ $order->receiver_name }}</p>
+            <p class="card-text"><strong>Email:</strong> {{ $order->receiver_email }}</p>
+            <p class="card-text"><strong>Số điện thoại:</strong> {{ $order->receiver_phone }}</p>
+            <p class="card-text"><strong>Địa chỉ:</strong> {{ $order->receiver_address }}</p>
 
-        <!-- Product Information -->
-        <div class="card shadow mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5 class="m-0 font-weight-bold">Thông tin sản phẩm</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <img src="{{ Storage::url($product->img_thumb) }}" alt="Ảnh sản phẩm" class="img-fluid mb-3" style="border-radius: 8px;">
-                    </div>
-                    <div class="col-md-8">
-                        <h3>{{ $product->name }}</h3>
-                        <p><strong>ID:</strong> {{ $product->id }}</p>
-                        <p><strong>Danh mục:</strong> {{ $product->category->name ?? 'Không xác định' }}</p>
-                        <p><strong>Giá:</strong> {{ number_format($product->price, 0, ',', '.') }} VND</p>
-                        <p><strong>Giá sale:</strong> {{ number_format($product->price_sale, 0, ',', '.') }} VND</p>
-                        <p><strong>Trạng thái:</strong> 
-                            {!! $product->is_active ?'<span class="badge bg-success text-white">Hoạt động</span>'
-                                : '<span class="badge bg-danger text-white">Không hoạt động</span>'!!}
-                        </p>
-                        <p><strong>Slug:</strong> {{ $product->slug }}</p>
-                        <p><strong>SKU:</strong> {{ $product->sku }}</p>
-                        <p ><strong>Is Best Sale:</strong> 
-                            {!! $product->is_best_sale ?'<span class="badge bg-success text-white">Có</span>'
-                                : '<span class="badge bg-danger text-white">Không</span>'!!}
-                        </p>
-                        <p><strong>Is 40% Sale:</strong>  {!! $product->is_40_sale ?'<span class="badge bg-success text-white">Có</span>'
-                                : '<span class="badge bg-danger text-white">Không</span>'!!}</span></p>
-                        <p><strong>Is Hot Online:</strong> {!! $product->is_hot_online ?'<span class="badge bg-success text-white">Có</span>'
-                                : '<span class="badge bg-danger text-white">Không</span>'!!}</p>
-                    </div>
-                </div>
-            </div>
+            <h5 class="card-title mt-4">Thông tin đơn hàng</h5>
+            <p class="card-text"><strong>Trạng thái đơn hàng:</strong> {{ $order::ORDER_STATUS[$order->order_status] }}</p>
+            <p class="card-text"><strong>Trạng thái thanh toán:</strong> {{ $order::PAYMENT_STATUS[$order->payment_status] }}</p>
+            <p class="card-text"><strong>Tổng tiền:</strong> {{ number_format($order->total_price, 2) }} đ</p>
         </div>
-        <div class="card shadow mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5 class="m-0 font-weight-bold">Ảnh sản phẩm</h5>
-            </div>
-            <div class="card-body">
-                @if($product->galleries->isEmpty())
-                    <p class="text-muted">Chưa có ảnh nào cho sản phẩm này.</p>
-                @else
-                    <div class="row">
-                        @foreach($product->galleries as $gallery)
-                            <div class="col-md-3 mb-3">
-                                <img src="{{ Storage::url($gallery->image) }}" alt="Ảnh gallery" class="img-thumbnail" style="max-width: 100%; height: auto;">
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
-            </div>
-        </div>
-        <!-- Product Variants -->
-        <div class="card shadow mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5 class="m-0 font-weight-bold">Biến thể sản phẩm</h5>
-            </div>
-            <div class="card-body">
-                @if($product->variants->isEmpty())
-                    <p class="text-muted">Chưa có biến thể nào cho sản phẩm này.</p>
-                @else
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Size</th>
-                                <th>Màu</th>
-                                <th>Ảnh</th>
-                                <th>Số lượng</th>
-                                <th>Giá</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($product->variants as $variant)
-                                <tr>
-                                    <td>{{ $variant->size->name ?? 'Không xác định' }}</td>
-                                    <td>{{ $variant->color->name ?? 'Không xác định' }}</td>
-                                    <td>
-                                        @if($variant->image)
-                                            <img src="{{ Storage::url($variant->image) }}" alt="Ảnh biến thể" class="img-thumbnail" style="width: 100px; height: auto;">
-                                        @else
-                                            Không có ảnh
-                                        @endif
-                                    </td>
-                                    <td>{{ $variant->quantity }}</td>
-                                    <td>{{$variant->price}} VND</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                @endif
-            </div>
-        </div>
-
-        <!-- Product Galleries -->
-       
-
-        <!-- Debug Information -->
-        {{-- <div class="card shadow mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5 class="m-0 font-weight-bold">Thông tin Debug</h5>
-            </div>
-            <div class="card-body">
-                <ul class="list-unstyled">
-                    @foreach($product->toArray() as $key => $value)
-                        <li><strong>{{ $key }}:</strong> {{ is_array($value) ? json_encode($value) : $value }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        </div> --}}
     </div>
+
+    <h2 class="mt-4">Sản phẩm trong đơn hàng</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Hình ảnh</th>
+                <th>Tên sản phẩm</th>
+                <th>SKU</th>
+                <th>Giá</th>
+                <th>Giá khuyến mại</th>
+                <th>Kích thước</th>
+                <th>Màu sắc</th>
+                <th>Số lượng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($order->orderItems as $item)
+            <tr>
+                <td>
+                    <img src="{{ asset('storage/' . $item->product_img_thumb) }}" alt="{{ $item->product_name }}" width="50">
+                </td>
+                <td>{{ $item->product_name }}</td>
+                <td>{{ $item->product_sku }}</td>
+                <td>{{ number_format($item->product_price, 2) }} đ</td>
+                <td>{{ number_format($item->product_price_sale, 2) }} đ</td>
+                <td>{{ $item->variant_size_name }}</td>
+                <td>{{ $item->variant_color_name }}</td>
+                <td>{{ $item->quantity }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <!-- Form cập nhật trạng thái đơn hàng -->
+    <form action="{{ route('admin.orders.updateStatus', $order->id) }}" method="POST" class="mt-4">
+        @csrf
+        @method('PUT')
+        <div class="form-group">
+            <label for="order_status">Trạng thái đơn hàng:</label>
+            <select name="order_status" id="order_status" class="form-control">
+                @foreach($order::ORDER_STATUS as $status => $statusName)
+                    <option value="{{ $status }}" {{ $order->order_status == $status ? 'selected' : '' }}>{{ $statusName }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="payment_status">Trạng thái thanh toán:</label>
+            <select name="payment_status" id="payment_status" class="form-control">
+                @foreach($order::PAYMENT_STATUS as $status => $statusName)
+                    <option value="{{ $status }}" {{ $order->payment_status == $status ? 'selected' : '' }}>{{ $statusName }}</option>
+                @endforeach
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Cập nhật trạng thái</button>
+    </form>
+</div>
 @endsection
