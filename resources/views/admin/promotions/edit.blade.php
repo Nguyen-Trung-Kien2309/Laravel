@@ -19,6 +19,13 @@
         @csrf
         @method('PUT')
         <div class="form-group">
+            <label for="code">Mã khuyến mại:</label>
+            <input type="text" name="code" id="code" class="form-control" value="{{ old('code', $promotion->code) }}" >
+       
+            @error('code')
+            <div class="alert alert-danger">{{ $message }}</div>
+        @enderror </div>
+        <div class="form-group">
             <label for="title">Tên khuyến mại:</label>
             <input type="text" name="title" id="title" class="form-control" value="{{ old('title', $promotion->title) }}" >
        

@@ -30,25 +30,25 @@ Route::prefix('admin')->as('admin.')->middleware(['auth', 'checkRole:admin'])->g
     // Quản lý danh mục sản phẩm
     Route::resource('categories', CategoryController::class);
     Route::resource('promotions', PromotionController::class);
-// Route cho form tạo mới khuyến mại
-Route::get('admin/promotions/create', [PromotionController::class, 'create'])->name('promotions.create');
-Route::get('admin/promotions/{promotion}', [PromotionController::class, 'show'])->name('admin.promotions.show');
+    // Route cho form tạo mới khuyến mại
+    Route::get('admin/promotions/create', [PromotionController::class, 'create'])->name('promotions.create');
+    Route::get('admin/promotions/{promotion}', [PromotionController::class, 'show'])->name('admin.promotions.show');
 
 
-// Route::get('admin/promotions/edit', [PromotionController::class, 'edit'])->name
-// ('promotions.edit');
-// Route cho form tạo mới khuyến mại
-// Route::get('admin/promotions/edit/', [PromotionController::class, 'edit
-// '])->name('promotions.edit');
+    // Route::get('admin/promotions/edit', [PromotionController::class, 'edit'])->name
+    // ('promotions.edit');
+    // Route cho form tạo mới khuyến mại
+    // Route::get('admin/promotions/edit/', [PromotionController::class, 'edit
+    // '])->name('promotions.edit');
 
 
-Route::resource('orders', OrderController::class)->except(['create', 'store', 'destroy']);
-Route::put('orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+    Route::resource('orders', OrderController::class)->except(['create', 'store', 'destroy']);
+    Route::put('orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 
 
 
-Route::resource('invoices', InvoiceController::class)->only(['index', 'show']);
-Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
+    Route::resource('invoices', InvoiceController::class)->only(['index', 'show']);
+    Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
 
     // Quản lý sản phẩm
     Route::resource('products', ProductController::class);

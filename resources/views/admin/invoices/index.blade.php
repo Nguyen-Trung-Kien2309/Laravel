@@ -29,7 +29,7 @@
                 <td>{{ $invoice->user_email }}</td>
                 <td>{{ $invoice->user_phone }}</td>
                 <td>{{ $invoice->user_address }}</td>
-                <td>{{ number_format($invoice->total_price, 2) }} đ</td>
+                <td>{{ number_format($invoice->total_price) }} VND</td>
                 <td>{{ $invoice->created_at->format('d-m-Y H:i') }}</td>
                 <td class="">
                     <a href="{{ route('admin.invoices.show', $invoice->id) }}" class="btn btn-info btn-sm">Xem</a>

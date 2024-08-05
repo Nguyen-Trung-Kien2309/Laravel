@@ -54,9 +54,15 @@ Route::middleware('auth')->group(function () {
     Route::get('order/list', [OrderController::class, 'list'])->name('order.list');
 
     // Định nghĩa route cho trang thanh toán
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-    
-    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+  //  Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+  // web.php
+
+Route::post('/cart/apply-promotion', [CartController::class, 'applyPromotion'])->name('cart.apply_promotion');
+
+
+
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
     Route::get('/thankyou', function () {
         return view('thankyou');
     })->name('thankyou');

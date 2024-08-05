@@ -14,6 +14,7 @@ class CreatePromotionsTable extends Migration
     {
         Schema::create('promotions', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique(); 
             $table->string('title'); // Tên khuyến mại
             $table->text('description')->nullable(); // Mô tả chi tiết
             $table->decimal('discount', 5, 2); // Giảm giá (phần trăm hoặc số tiền cụ thể)
@@ -32,6 +33,7 @@ class CreatePromotionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('promotions');
-    }
-}
+        Schema::table('promotions', function (Blueprint $table) {
+            $table->dropColumn('code'); // Xóa cột 'code' nếu cần
+        });
+}}

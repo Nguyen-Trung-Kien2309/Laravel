@@ -44,6 +44,7 @@ class PromotionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'code' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'discount' => 'required|numeric|min:0',
@@ -54,6 +55,7 @@ class PromotionController extends Controller
         ]);
     
         Promotion::create([
+            'code' => $request->code,
             'title' => $request->title,
             'description' => $request->description,
             'discount' => $request->discount,
@@ -69,6 +71,7 @@ class PromotionController extends Controller
     {
         // Xác thực dữ liệu
         $request->validate([
+            'code' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'discount' => 'required|numeric',
             'discount_type' => 'required|in:percentage,fixed',
@@ -84,6 +87,7 @@ class PromotionController extends Controller
     
         // Cập nhật khuyến mại
         $promotion->update([
+            'code' => $request->input('code'),
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'discount' => $request->input('discount'),

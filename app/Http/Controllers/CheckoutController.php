@@ -1,75 +1,92 @@
 <?php
+// app/Http/Controllers/CheckoutController.php
 
 namespace App\Http\Controllers;
 
-use App\Models\CartItem;
+use App\Models\Cart;
 use App\Models\Order;
-use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
-
-use App\Mail\OrderConfirmation;
 
 class CheckoutController extends Controller
 {
     public function index()
     {
-        $cart = CartItem::where('cart_id', Auth::user()->cart_id)->get();
+        // Xử lý hiển thị trang thanh toán
+        $user = Auth::user();
+        $cart = Cart::where('user_id', $user->id)->first();
         
-        $totalAmount = $cart->sum(function ($item) {
-            return $item->quantity * $item->product_variant->price;
+        if (!$cart || $cart->cartItems->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Giỏ hàng của bạn đang trống.');
+        }
+
+        // Tính toán tổng tiền và áp dụng khuyến mại
+        $totalPrice = $cart->cartItems->sum(function ($cartItem) {
+            return ($cartItem->productVariant->product->price_sale ?: $cartItem->productVariant->product->price) * $cartItem->quantity;
         });
 
-        return view('checkout', [
-            'totalAmount' => $totalAmount,
-            'productVariants' => $cart->map(function ($item) {
-                return [
-                    'product_variant_id' => $item->product_variant_id,
-                    'quantity' => $item->quantity,
-                    'price' => $item->product_variant->price,
-                ];
-            }),
-            'cartId' => Auth::user()->cart_id,
-        ]);
-    }
-
-    public function process(Request $request)
-    {
-        try {
-            $order = Order::create([
-                'user_id' => $request->user_id,
-                'user_email' => $request->user_email,
-                'user_name' => $request->user_name,
-                'user_address' => $request->user_address,
-                'user_phone' => $request->user_phone,
-                'receiver_email' => $request->receiver_email,
-                'receiver_name' => $request->receiver_name,
-                'receiver_address' => $request->receiver_address,
-                'receiver_phone' => $request->receiver_phone,
-                'total_price' => $request->total_amount,
-            ]);
-
-            $productVariants = json_decode($request->product_variants);
-            foreach ($productVariants as $item) {
-                $item->order_id = $order->id;
-                OrderItem::create((array) $item);
-
-                CartItem::where([
-                    'cart_id' => $request->cart_id,
-                    'product_variant_id' => $item->product_variant_id
-                ])->delete();
-            }
-
-            // Gửi email xác nhận đơn hàng
-            Mail::to($request->user_email)->send(new OrderConfirmation($order));
-
-            return redirect()->route('thankyou')->with('success', 'Đặt hàng thành công');
-        } catch (\Exception $exception) {
-            Log::error('Order creation failed: '.$exception->getMessage());
-            return back()->withErrors(['error' => 'Đặt hàng không thành công.']);
+        $discount = 0;
+        if ($cart->promotion) {
+            $discount = $cart->promotion->discount_type === 'percentage'
+                ? ($totalPrice * $cart->promotion->discount / 100)
+                : $cart->promotion->discount;
         }
+
+        $totalPriceAfterDiscount = $totalPrice - $discount;
+
+        return view('checkout.index', compact('totalPrice', 'totalPriceAfterDiscount', 'cart'));
     }
-    
+
+ // app/Http/Controllers/CheckoutController.php
+
+public function process(Request $request)
+{
+    $user = Auth::user();
+
+    if (!$user) {
+        return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để tiếp tục.');
+    }
+
+    $cart = Cart::where('user_id', $user->id)->first();
+
+    if (!$cart || $cart->cartItems->isEmpty()) {
+        return redirect()->route('cart.index')->with('error', 'Giỏ hàng của bạn đang trống.');
+    }
+
+    $totalPrice = $cart->cartItems->sum(function ($cartItem) {
+        return ($cartItem->productVariant->product->price_sale ?: $cartItem->productVariant->product->price) * $cartItem->quantity;
+    });
+
+    $discount = 0;
+    if ($cart->promotion) {
+        $discount = $cart->promotion->discount_type === 'percentage'
+            ? ($totalPrice * $cart->promotion->discount / 100)
+            : $cart->promotion->discount;
+    }
+
+    $totalPriceAfterDiscount = $totalPrice - $discount;
+
+    // Tạo đơn hàng mới với tất cả các trường bắt buộc
+    $order = Order::create([
+        'user_id' => $user->id,
+        'user_email' => $user->email,
+        'user_name' => $user->name,
+        'user_address' => $request->input('user_address'), // Đảm bảo có giá trị
+        'user_phone' => $request->input('user_phone'), // Đảm bảo có giá trị
+        'receiver_email' => $request->input('receiver_email'),
+        'receiver_name' => $request->input('receiver_name'),
+        'receiver_address' => $request->input('receiver_address'),
+        'receiver_phone' => $request->input('receiver_phone'),
+        'total_price' => $totalPriceAfterDiscount,
+        'promotion_id' => $cart->promotion_id,
+        'status' => 'pending',
+    ]);
+
+    // Xóa giỏ hàng sau khi thanh toán thành công
+    $cart->cartItems()->delete();
+    $cart->delete();
+
+    return view('checkout.thank_you', compact('order'));
+}
+
 }

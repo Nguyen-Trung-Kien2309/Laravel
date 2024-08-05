@@ -4,12 +4,43 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\ProductVariant;
+use App\Models\Promotion;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+   
+    public function applyPromotion(Request $request)
+    {
+        $user = Auth::user();
+        $cart = Cart::where('user_id', $user->id)->first();
+    
+        if (!$cart) {
+            return back()->withErrors(['error' => 'Giỏ hàng không tồn tại.']);
+        }
+    
+        $promotionCode = $request->input('promotion_code');
+        $promotion = Promotion::where('code', $promotionCode)->first();
+    
+        if (!$promotion) {
+            return back()->withErrors(['error' => 'Mã khuyến mại không hợp lệ.']);
+        }
+    
+        // Kiểm tra xem khuyến mại có còn hiệu lực không
+        if (!$promotion->isActive()) {
+            return back()->withErrors(['error' => 'Mã khuyến mại đã hết hạn.']);
+        }
+    
+        // Áp dụng khuyến mại cho giỏ hàng
+        $cart->promotion_id = $promotion->id;
+        $cart->save();
+    
+        return redirect()->route('cart.index')->with('message', 'Mã khuyến mại đã được áp dụng.');
+    }
+    
+
     public function list()
     {
         // Tạm thời lấy mặc định user đầu tiên
@@ -58,31 +89,37 @@ class CartController extends Controller
 
     public function index()
     {
-        // Lấy người dùng đã đăng nhập
         $user = Auth::user();
-
-        // Kiểm tra nếu người dùng chưa đăng nhập
+    
         if (!$user) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem giỏ hàng của bạn.');
         }
-
-        // Lấy giỏ hàng của người dùng hiện tại
+    
         $cart = Cart::with('cartItems.productVariant.product', 'cartItems.productVariant.size', 'cartItems.productVariant.color')
                     ->where('user_id', $user->id)
                     ->first();
-
-        // Kiểm tra nếu giỏ hàng rỗng
+    
         if (!$cart || $cart->cartItems->isEmpty()) {
             return view('cart.index')->with('message', 'Giỏ hàng của bạn đang trống.');
         }
-
-        // Tính tổng giá trị giỏ hàng
+    
         $totalPrice = $cart->cartItems->sum(function ($cartItem) {
             return ($cartItem->productVariant->product->price_sale ?: $cartItem->productVariant->product->price) * $cartItem->quantity;
         });
-
-        return view('cart.index', compact('cart', 'totalPrice'));
+    
+        // Áp dụng khuyến mại nếu có
+        $discount = 0;
+        if ($cart->promotion) {
+            $discount = $cart->promotion->discount_type === 'percentage'
+                ? ($totalPrice * $cart->promotion->discount / 100)
+                : $cart->promotion->discount;
+        }
+    
+        $totalPriceAfterDiscount = $totalPrice - $discount;
+    
+        return view('cart.index', compact('cart', 'totalPrice', 'totalPriceAfterDiscount'));
     }
+    
 
     public function update(Request $request, $id)
     {

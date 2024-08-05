@@ -7,6 +7,7 @@
     
     <div class="card">
         <div class="card-body">
+            <h5 class="card-code">Mã khuyến mại: {{ $promotion->code }}</h5>
             <h5 class="card-title">Tên khuyến mại: {{ $promotion->title }}</h5>
             <p class="card-text"><strong>Mô tả:</strong> {{ $promotion->description }}</p>
             <p class="card-text"><strong>Giảm giá:</strong> {{ $promotion->discount }} {{ $promotion->discount_type == 'percentage' ? '%' : 'đ' }}</p>

@@ -65,6 +65,29 @@
                     @endforeach
                 </tbody>
             </table>
+           <!-- Thêm vào trang giỏ hàng -->
+<form action="{{ route('cart.apply_promotion') }}" method="POST">
+    @csrf
+    <div class="form-group">
+        <label for="promotion_code">Mã khuyến mại:</label>
+        <input type="text" id="promotion_code" name="promotion_code" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Áp Dụng</button>
+</form>
+
+            @if ($cart->promotion)
+            <h4>Khuyến mại: {{ $cart->promotion->title }} - {{ $cart->promotion->formatted_discount }} {{ $cart->promotion->discount_type === 'percentage' ? '%' : 'VND' }}</h4>
+            @php
+                $discount = $cart->promotion->discount_type === 'percentage'
+                    ? ($totalPrice * $cart->promotion->discount / 100)
+                    : $cart->promotion->discount;
+                $totalPriceAfterDiscount = $totalPrice - $discount;
+            @endphp
+            <h3>Tổng tiền sau khuyến mại: {{ number_format($totalPriceAfterDiscount, 0, ',', '.') }} VND</h3>
+        @else
+            <h3>Tổng tiền: {{ number_format($totalPrice, 0, ',', '.') }} VND</h3>
+        @endif
+                    
 
             <h3>Tổng tiền: {{ number_format($totalPrice, 0, ',', '.') }} VND</h3>
 

@@ -14,6 +14,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
+                <th>Mã km</th>
                 <th>Tên</th>
                 <th>Mô tả</th>
                 <th>Giảm giá</th>
@@ -28,6 +29,7 @@
             @foreach($promotions as $promotion)
             <tr align="center">
 
+            <td>{{ $promotion->code }}</td>
             <td>{{ $promotion->title }}</td>
                     <td>{{ $promotion->description }}</td>
                     <td>

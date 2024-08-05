@@ -7,6 +7,7 @@ use Carbon\Carbon;
 class Promotion extends Model
 {
     protected $fillable = [
+        'code',
         'title',
         'description',
         'discount',
@@ -24,6 +25,7 @@ class Promotion extends Model
         $now = Carbon::now();
         return $this->active && $this->start_date <= $now && $this->end_date >= $now;
     }
+
     public function getFormattedDiscountAttribute()
 {
     if ($this->discount_type === 'percentage') {
