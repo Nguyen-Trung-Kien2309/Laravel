@@ -15,6 +15,7 @@
                 <th>Tên người đặt</th>
                 <th>Email</th>
                 <th>Số điện thoại</th>
+                <th>Địa chỉ</th>
                 <th>Tổng tiền</th>
                 <th>Ngày tạo</th>
                 <th>Hành động</th>
@@ -27,11 +28,14 @@
                 <td>{{ $invoice->user_name }}</td>
                 <td>{{ $invoice->user_email }}</td>
                 <td>{{ $invoice->user_phone }}</td>
+                <td>{{ $invoice->user_address }}</td>
                 <td>{{ number_format($invoice->total_price, 2) }} đ</td>
                 <td>{{ $invoice->created_at->format('d-m-Y H:i') }}</td>
-                <td>
+                <td class="">
                     <a href="{{ route('admin.invoices.show', $invoice->id) }}" class="btn btn-info btn-sm">Xem</a>
-                    <a href="{{ route('admin.invoices.print', $invoice->id) }}" class="btn btn-primary btn-sm">In</a>
+                    <a href="{{ route('admin.invoices.print', $invoice->id) }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        class="fas fa-download fa-sm text-white"></i> </a>
+                    {{-- <a href="{{ route('admin.invoices.print', $invoice->id) }}" class="btn btn-primary btn-sm">In</a> --}}
                 </td>
             </tr>
             @endforeach

@@ -15,6 +15,8 @@
                 <th>Tên người đặt</th>
                 <th>Email</th>
                 <th>Số điện thoại</th>
+                <th>Địa chỉ</th>
+
                 <th>Tổng tiền</th>
                 <th>Trạng thái đơn hàng</th>
                 <th>Trạng thái thanh toán</th>
@@ -28,6 +30,8 @@
                 <td>{{ $order->user_name }}</td>
                 <td>{{ $order->user_email }}</td>
                 <td>{{ $order->user_phone }}</td>
+                <td>{{ $order->user_address }}</td>
+
                 <td>{{ number_format($order->total_price, 2) }} đ</td>
                 <td>{{ $order::ORDER_STATUS[$order->order_status] }}</td>
                 <td>{{ $order::PAYMENT_STATUS[$order->payment_status] }}</td>

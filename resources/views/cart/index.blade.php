@@ -36,8 +36,21 @@
                                 <form action="{{ route('cart.update', $item->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
-                                    <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" required>
-                                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                    <div class="input-group quantity mr-3" style="width: 130px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-primary btn-minus" type="submit">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="number" class="form-control bg-secondary text-center" name="quantity" id="quantity" min="1" value="{{ $item->quantity }}" required>
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-primary btn-plus" type="submit">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {{-- <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" required>
+                                    <button type="submit" class="btn btn-primary">Cập nhật</button> --}}
                                 </form>
                             </td>
                             <td>{{ number_format(($item->productVariant->product->price_sale ?: $item->productVariant->product->price) * $item->quantity, 0, ',', '.') }} VND</td>
