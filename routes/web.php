@@ -4,6 +4,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Product;
@@ -52,12 +53,20 @@ Route::middleware('auth')->group(function () {
     Route::get('cart/list', [CartController::class, 'list'])->name('cart.list');
     Route::post('order/add', [OrderController::class, 'add'])->name('order.add');
     Route::get('order/list', [OrderController::class, 'list'])->name('order.list');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
 
     // Định nghĩa route cho trang thanh toán
   //  Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
   // web.php
 
 Route::post('/cart/apply-promotion', [CartController::class, 'applyPromotion'])->name('cart.apply_promotion');
+
+
+Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
+Route::get('checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+Route::get('checkout/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
+
 
 
 

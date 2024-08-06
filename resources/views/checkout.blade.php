@@ -61,7 +61,7 @@
                             <th>Quantity</th>
                             <th>Total</th>
                         </tr>
-                    {{-- </thead>
+                    </thead>
                     <tbody>
                         @foreach($cart->cartItems as $item)
                             <tr>
@@ -71,7 +71,7 @@
                                 <td>{{ number_format(($item->productVariant->product->price_sale ?: $item->productVariant->product->price) * $item->quantity, 0, ',', '.') }} VND</td>
                             </tr>
                         @endforeach
-                    </tbody> --}}
+                    </tbody>
                     <tfoot>
                         <tr>
                             <th colspan="3" class="text-right">Subtotal</th>

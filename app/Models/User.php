@@ -54,7 +54,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+    
     /**
      * Kiểm tra người dùng có phải là admin không.
      *
@@ -64,10 +68,7 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
-    public function orders(): HasMany
-    {
-        return $this->hasMany(Order::class);
-    }
+  
     /**
      * Kiểm tra người dùng có phải là nhân viên không.
      *

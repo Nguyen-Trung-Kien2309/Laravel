@@ -3,10 +3,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\InvoiceMail;
 use App\Models\Cart;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -85,7 +87,8 @@ public function process(Request $request)
     // Xóa giỏ hàng sau khi thanh toán thành công
     $cart->cartItems()->delete();
     $cart->delete();
-
+ // Gửi email hóa đơn
+ Mail::to($user->email)->send(new InvoiceMail($order));
     return view('checkout.thank_you', compact('order'));
 }
 

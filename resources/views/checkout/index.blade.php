@@ -45,37 +45,46 @@
                 <h4>Khuyến mại: {{ $cart->promotion->title }} - {{ $cart->promotion->formatted_discount }} {{ $cart->promotion->discount_type === 'percentage' ? '%' : 'VND' }}</h4>
                 <h3>Tổng tiền sau khuyến mại: {{ number_format($totalPriceAfterDiscount, 0, ',', '.') }} VND</h3>
             @endif
-<!-- resources/views/checkout/index.blade.php -->
 
-<form action="{{ route('checkout.process') }}" method="POST">
-    @csrf
-    <div class="form-group">
-        <label for="user_address">Địa chỉ của bạn:</label>
-        <input type="text" id="user_address" name="user_address" class="form-control" required>
-    </div>
-    <div class="form-group">
-        <label for="user_phone">Số điện thoại của bạn:</label>
-        <input type="text" id="user_phone" name="user_phone" class="form-control" required>
-    </div>
-    <div class="form-group">
-        <label for="receiver_email">Email người nhận:</label>
-        <input type="email" id="receiver_email" name="receiver_email" class="form-control" required>
-    </div>
-    <div class="form-group">
-        <label for="receiver_name">Tên người nhận:</label>
-        <input type="text" id="receiver_name" name="receiver_name" class="form-control" required>
-    </div>
-    <div class="form-group">
-        <label for="receiver_address">Địa chỉ người nhận:</label>
-        <input type="text" id="receiver_address" name="receiver_address" class="form-control" required>
-    </div>
-    <div class="form-group">
-        <label for="receiver_phone">Số điện thoại người nhận:</label>
-        <input type="text" id="receiver_phone" name="receiver_phone" class="form-control" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Xác nhận thanh toán</button>
-</form>
-
+            <form action="{{ route('checkout.process') }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="user_name">Tên của bạn:</label>
+                    <input type="text" id="user_name" name="user_name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="user_address">Địa chỉ của bạn:</label>
+                    <input type="text" id="user_address" name="user_address" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="user_phone">Số điện thoại của bạn:</label>
+                    <input type="text" id="user_phone" name="user_phone" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="receiver_email">Email người nhận:</label>
+                    <input type="email" id="receiver_email" name="receiver_email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="receiver_name">Tên người nhận:</label>
+                    <input type="text" id="receiver_name" name="receiver_name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="receiver_address">Địa chỉ người nhận:</label>
+                    <input type="text" id="receiver_address" name="receiver_address" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="receiver_phone">Số điện thoại người nhận:</label>
+                    <input type="text" id="receiver_phone" name="receiver_phone" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="payment_method">Phương thức thanh toán:</label>
+                    <select id="payment_method" name="payment_method" class="form-control" required>
+                        <option value="COD">Thanh toán khi nhận hàng</option>
+                        <option value="VNPAY">Thanh toán trực tuyến qua VNPAY</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Xác nhận thanh toán</button>
+            </form>
         @else
             <p>Giỏ hàng của bạn đang trống.</p>
         @endif
