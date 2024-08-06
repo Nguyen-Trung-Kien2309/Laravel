@@ -54,7 +54,7 @@
             </a>
             <a href="{{route('cart.index')}}" class="btn border">
                 <i class="fas fa-shopping-cart text-primary"></i>
-                <span class="badge">0</span>
+                <span class="badge"></span>
             </a>
         </div>
     </div>

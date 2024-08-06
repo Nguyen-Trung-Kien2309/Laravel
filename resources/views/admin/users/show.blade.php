@@ -13,8 +13,9 @@
             <div class="card-body">
                 <p><strong>Email:</strong> {{ $user->email }}</p>
                 <p><strong>Role:</strong> {{ $user->role }}</p>
-                <p><strong>Created At:</strong> {{ $user->created_at->format('d-m-Y H:i:s') }}</p>
-                <p><strong>Updated At:</strong> {{ $user->updated_at->format('d-m-Y H:i:s') }}</p>
+               
+                <p><strong>Created At:</strong> {{ \Carbon\Carbon::parse($user->created_at)->format('Y-d-m H:i:s') }}</p>
+                <p><strong>Updated At:</strong> {{ \Carbon\Carbon::parse($user->updated_at)->format('Y-d-m H:i:s') }}</p>
             </div>
             <div class="card-footer d-flex justify-content-between">
                 <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Back to List</a>
